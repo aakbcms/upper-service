@@ -15,12 +15,9 @@ var debug = require('debug')('upper:network');
 /**
  * The network object.
  *
- * @param {object} bus
- *   The event bus.
- *
  * @constructor
  */
-var Network = function Network(url, timeout = 1000, port = 80) {
+var Network = function Network(url, timeout = 1000, port = null) {
   this.url = url;
   this.port = port;
   this.timeout = timeout;
@@ -29,19 +26,16 @@ var Network = function Network(url, timeout = 1000, port = 80) {
 /**
  * Check if a given URI address is online.
  *
- * @param {string} uri
- *   The URI to check.
- *
  * @returns {Function|promise|*|d}
  *   Resolves if the URI is online else rejected.
  */
 Network.prototype.isOnline = function isOnline() {
   var self = this;
-  return new Promise(function(resolve, reject){
+  return new Promise(function(resolve, reject) {
     try {
       var address = url.parse(self.url);
-      var port = address.protocol === 'https:' ? 443 : 80;
-      var tester = fork(__dirname + '/network_tester.js', [address.host, port, 1000]);
+      var port = (self.port ==! null ? self.port : (address.protocol === 'https:' ? 443 : 80));
+      var tester = fork(__dirname + '/network_tester.js', [address.host, port, self.timeout]);
 
       tester.once('message', function (data) {
         if (data.error) {
