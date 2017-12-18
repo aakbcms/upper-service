@@ -1,20 +1,32 @@
 /**
  * @file
- * Handles communication with FBS through SIP2.
+ * Handles communication with FBS through CMS rest API.
  */
 
 'use strict';
 
 var request = require('request-json');
 
+/**
+ * Default constructor.
+ *
+ * @param {object} config
+ *   Configuration object from the config.json. For more information see example.config.json file.
+ *
+ * @constructor
+ */
 var FBS = function FBS(config) {
   this.config = config;
-
   this.client = request.createClient(config.endpoint);
 };
 
 /**
- * Send status message to FBS.
+ * Login to FBS.
+ *
+ * This will give us a session key for further communication with the API.
+ *
+ * @return {*}
+ *   Promise tha resolved with HTTP statusCode and rejects with the http error.
  */
 FBS.prototype.login = function login() {
   var self = this;
@@ -34,6 +46,12 @@ FBS.prototype.login = function login() {
   });
 };
 
+/**
+ * Authenticate a library with FBS.
+ *
+ * @return {*}
+ *   Promise tha resolved with HTTP statusCode and rejects with the http error.
+ */
 FBS.prototype.authenticate = function authenticate() {
   var self = this;
   return new Promise(function(resolve, reject) {
@@ -50,6 +68,5 @@ FBS.prototype.authenticate = function authenticate() {
     });
   });
 };
-
 
 module.exports = FBS;

@@ -5,9 +5,6 @@
 
 'use strict';
 
-var util = require('util');
-var eventEmitter = require('events').EventEmitter;
-
 var Request = require('./request.js');
 
 /**
@@ -22,11 +19,11 @@ var SIP2 = function SIP2(config) {
   this.config = config;
 };
 
-// Extend the object with event emitter.
-util.inherits(SIP2, eventEmitter);
-
 /**
  * Send status message to FBS.
+ *
+ * @return {*}
+ *   Promise tha resolved with response ID and rejects with the http error.
  */
 SIP2.prototype.libraryStatus = function libraryStatus() {
   var self = this;
@@ -37,7 +34,7 @@ SIP2.prototype.libraryStatus = function libraryStatus() {
         reject(err);
       }
       else {
-        resolve(response);
+        resolve(response.id);
       }
     });
   });

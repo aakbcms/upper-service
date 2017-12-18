@@ -1,10 +1,28 @@
+/**
+ * @file
+ * OpenSearch request handler.
+ */
 
 var soap = require('soap');
 
+/**
+ * OpenSearch constructor.
+ *
+ * @param {object} config
+ *   Configuration object from the config.json. For more information see example.config.json file.
+ *
+ * @constructor
+ */
 var OpenSearch = function OpenSearch(config) {
   this.config = config;
 };
 
+/**
+ * Send search request to OpenSearch.
+ *
+ * @return {*}
+ *   Promise that resolves with the time that the data well used or reject with error.
+ */
 OpenSearch.prototype.search = function search() {
   var self = this;
 

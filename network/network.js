@@ -26,8 +26,8 @@ var Network = function Network(url, timeout = 1000, port = null) {
 /**
  * Check if a given URI address is online.
  *
- * @returns {Function|promise|*|d}
- *   Resolves if the URI is online else rejected.
+ * @returns {*}
+ *   Promise resolves if the URI is online else rejected.
  */
 Network.prototype.isOnline = function isOnline() {
   var self = this;
@@ -61,14 +61,4 @@ Network.prototype.isOnline = function isOnline() {
   });
 };
 
-/**
- * Register the plugin with architect.
- *
- * @param {array} options
- *   Options defined in app.js.
- * @param {array} imports
- *   The other plugins available.
- * @param {function} register
- *   Callback function used to register this plugin.
- */
 module.exports = Network;
