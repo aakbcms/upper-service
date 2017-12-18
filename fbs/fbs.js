@@ -17,7 +17,9 @@ var request = require('request-json');
  */
 var FBS = function FBS(config) {
   this.config = config;
-  this.client = request.createClient(config.endpoint);
+  this.client = request.createClient(config.endpoint, {
+    time : true
+  });
 };
 
 /**
@@ -26,7 +28,7 @@ var FBS = function FBS(config) {
  * This will give us a session key for further communication with the API.
  *
  * @return {*}
- *   Promise tha resolved with HTTP statusCode and rejects with the http error.
+ *   Promise tha resolved with HTTP statusCode and request time. Rejects with the http error.
  */
 FBS.prototype.login = function login() {
   var self = this;
@@ -40,7 +42,10 @@ FBS.prototype.login = function login() {
       }
       else {
         self.client.headers['X-Session'] = body.sessionKey;
-        resolve(res.statusCode);
+        resolve({
+          'statusCode': res.statusCode,
+          'time': res.elapsedTime
+        });
       }
     });
   });
@@ -50,7 +55,7 @@ FBS.prototype.login = function login() {
  * Authenticate a library with FBS.
  *
  * @return {*}
- *   Promise tha resolved with HTTP statusCode and rejects with the http error.
+ *   Promise tha resolved with HTTP statusCode and request time. Rejects with the http error.
  */
 FBS.prototype.authenticate = function authenticate() {
   var self = this;
@@ -63,7 +68,10 @@ FBS.prototype.authenticate = function authenticate() {
         reject(err);
       }
       else {
-        resolve(res.statusCode);
+        resolve({
+          'statusCode': res.statusCode,
+          'time': res.elapsedTime
+        });
       }
     });
   });
