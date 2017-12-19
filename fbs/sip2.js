@@ -29,12 +29,17 @@ SIP2.prototype.libraryStatus = function libraryStatus() {
   var self = this;
   return new Promise(function(resolve, reject) {
     var req = new Request(self.config);
-    req.libraryStatus(function (err, response) {
+    req.libraryStatus(function (err, res) {
       if (err) {
         reject(err);
       }
       else {
-        resolve(response.id);
+        resolve({
+          'id': res.id,
+          'statusCode': res.statusCode,
+          'time': res.elapsedTime,
+          'uri': self.config.endpoint
+        });
       }
     });
   });

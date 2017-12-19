@@ -7,7 +7,6 @@
 'use strict';
 
 var url = require('url');
-var Promise = require("bluebird");
 var fork = require('child_process').fork;
 
 var debug = require('debug')('upper:network');
@@ -31,20 +30,32 @@ var Network = function Network(url, timeout = 1000, port = null) {
  */
 Network.prototype.isOnline = function isOnline() {
   var self = this;
+
   return new Promise(function(resolve, reject) {
     try {
       var address = url.parse(self.url);
       var port = (self.port ==! null ? self.port : (address.protocol === 'https:' ? 443 : 80));
+
+      var hrstart = process.hrtime();
       var tester = fork(__dirname + '/network_tester.js', [address.host, port, self.timeout]);
 
       tester.once('message', function (data) {
         if (data.error) {
           debug('Tester error: ' + data.message);
-          reject(data.message);
+          reject({
+            'message': data.message,
+            'uri': self.url,
+            'host': address.protocol + '//' + address.host
+          });
         }
         else {
+          var hrend = process.hrtime(hrstart);
           debug('Tester connected successful (pid: ' + tester.pid + ')');
-          resolve();
+          resolve({
+            'uri': self.url,
+            'time': Math.round(hrend[1]/1000000),
+            'host': address.protocol + '//' + address.host
+          });
         }
       });
 
@@ -56,7 +67,10 @@ Network.prototype.isOnline = function isOnline() {
       debug('Tester started with pid: ', tester.pid);
     }
     catch (err) {
-      reject(err);
+      reject({
+        'message': err,
+        'uri': self.url
+      });
     }
   });
 };

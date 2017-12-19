@@ -1,83 +1,101 @@
 /**
- * @file
- * Main application file.
  *
- * This application check's the different services required by DDB CMS base on the checks defined in the configuration
- * file.
  */
+var debug = require('debug')('upper:express');
 
-var config = require('./config.json');
-var debug = require('debug')('upper:main');
+var http = require('http');
 
-// Network check - used to check for simple socket connection for a given service.
-var Network = require('./network/network');
+var express = require('express');
+var path = require('path');
+var favicon = require('serve-favicon');
+var bodyParser = require('body-parser');
 
-// Loop over the endpoints in the config file.
-for (var i in config.endpoints) {
-	var endpoint = config.endpoints[i];
+var index = require('./routes/index');
 
-	var networlTester = new Network(endpoint.url);
-  networlTester.isOnline()
-  .bind(endpoint)
-	.then(function() {
-	   debug('Service is online: ' + this.url);
+var app = express();
 
-	   for (var j in this.tests) {
-	     var test = this.tests[j];
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'twig');
 
-	     // Switch of the different types of tests.
-       switch (test.type) {
-         case "sip2":
-           // SIP2 protocol test - simple 99 request to FBS.
-           var SIP2 = require('./fbs/sip2');
-           var sip2 = new SIP2(test.config);
-           sip2.libraryStatus().then(function(response) {
-             debug(response);
-           }).catch(function(e) {
-             debug(e);
-           });
-           break;
+// uncomment after placing your favicon in /public
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-         case "fbs":
-           // Test FBS CMS api with a login request and then an authentication request for a test user.
-           var FBS = require('./fbs/fbs');
-           var fbs = new FBS(test.config);
-           fbs.login().then(function(response) {
-             if (parseInt(response) === 200) {
-               fbs.authenticate().then(function(response) {
-                 debug(response);
-               }).catch(function(e) {
-                 debug(e);
-               });
-             }
-             else {
-               console.log('NO');
-             }
-           }).catch(function(e) {
-             debug(e);
-           });
-           break;
+app.use('/', index);
 
-         case 'opensearch':
-           // Connect to OpenSearch and send search request.
-           var OpenSearch = require('./opensearch/opensearch');
-           var client = new OpenSearch(test.config);
-           client.search().then(function (time) {
-             debug(time);
-           }).catch(function(e) {
-             debug(e);
-           });
-           break;
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
 
-         default:
-           console.error('Unknown test found in configuration: ' + test.type);
-           break;
-       }
-     }
-	})
-	.catch(function(e) {
-	  // Socket connection test error - network tester.
-	  debug(e);
-		console.log('NO');
-	});
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
+
+/**
+ * Get port from environment and store in Express.
+ */
+var port = process.env.PORT || '3000';
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
 }

@@ -106,7 +106,8 @@ Request.prototype.send = function send(message, firstVar, callback) {
       'User-Agent': 'bibbox',
       'Content-Type': 'application/xml'
     },
-    body: xml
+    body: xml,
+    time: true
   };
 
   var request = require('request');
@@ -134,6 +135,11 @@ Request.prototype.send = function send(message, firstVar, callback) {
       if (res.hasError()) {
         err = new Error(res.getError());
       }
+
+      if (response.hasOwnProperty('elapsedTime')) {
+        res.elapsedTime = response.elapsedTime;
+      }
+      res.statusCode = response.statusCode;
 
       callback(err, res);
     }
