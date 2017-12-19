@@ -27,17 +27,27 @@ OpenSearch.prototype.search = function search() {
   var self = this;
 
   return new Promise(function(resolve, reject) {
+    var hrstart = process.hrtime();
     soap.createClient(self.config.wsdl, function(err, client) {
       if (err) {
         reject(err);
       }
       else {
         client.search(self.config, function (err, result) {
+          var hrend = process.hrtime(hrstart);
+          var time = Math.round(hrend[1]/1000000);
           if (err) {
-            reject(err);
+            reject({
+              'uri': self.config.wsdl,
+              'time': time
+            });
           }
           else {
-            resolve(result.result.statInfo.time);
+            resolve({
+              'uri': self.config.wsdl,
+              'time': time,
+              'timeOpenSearch': result.result.statInfo.time
+            });
           }
         });
       }

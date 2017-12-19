@@ -40,9 +40,17 @@ FBS.prototype.login = function login() {
       if (err) {
         reject(err);
       }
+      else if (res.statusCode !== 200) {
+        reject({
+          'uri': uri,
+          'statusCode': res.statusCode,
+          'time': res.elapsedTime
+        });
+      }
       else {
         self.client.headers['X-Session'] = body.sessionKey;
         resolve({
+          'uri': uri,
           'statusCode': res.statusCode,
           'time': res.elapsedTime
         });
@@ -67,8 +75,16 @@ FBS.prototype.authenticate = function authenticate() {
       if (err) {
         reject(err);
       }
+      else if (res.statusCode !== 200) {
+        reject({
+          'uri': uri,
+          'statusCode': res.statusCode,
+          'time': res.elapsedTime
+        });
+      }
       else {
         resolve({
+          'uri': uri,
           'statusCode': res.statusCode,
           'time': res.elapsedTime
         });

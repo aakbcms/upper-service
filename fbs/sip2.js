@@ -37,7 +37,8 @@ SIP2.prototype.libraryStatus = function libraryStatus() {
         resolve({
           'id': res.id,
           'statusCode': res.statusCode,
-          'time': res.elapsedTime
+          'time': res.elapsedTime,
+          'uri': self.config.endpoint
         });
       }
     });

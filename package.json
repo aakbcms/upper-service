@@ -30,6 +30,7 @@
     "request": "^2.83.0",
     "request-json": "^0.6.2",
     "serve-favicon": "^2.4.5",
+    "slack": "^9.1.1",
     "soap": "^0.23.0",
     "twig": "^1.10.5"
   },
