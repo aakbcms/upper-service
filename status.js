@@ -3,8 +3,6 @@
  * Wrapper for the status checks.
  */
 
-var debug = require('debug')('upper:status');
-
 // Network check - used to check for simple socket connection for a given service.
 var Network = require('./network/network');
 
@@ -18,11 +16,25 @@ var fbsClient;
  */
 var Status = function Status() {};
 
+/**
+ * Test network connection.
+ *
+ * @param url
+ *
+ * @return {*}
+ */
 Status.prototype.testConnections = function testConnections(url) {
   var networkTester = new Network(url);
   return networkTester.isOnline();
 };
 
+/**
+ * Test the status of the different FBS end points.
+ *
+ * @param config
+ * @param type
+ * @return {*}
+ */
 Status.prototype.testFBS = function testFBS(config, type) {
   // Switch of the different types of tests.
   switch (type) {
@@ -48,6 +60,13 @@ Status.prototype.testFBS = function testFBS(config, type) {
   }
 };
 
+/**
+ * Test OpenSearch end point.
+ *
+ * @param config
+ * @param type
+ * @return {*}
+ */
 Status.prototype.testOpenSearch = function testOpenSearch(config, type) {
   var OpenSearch = require('./opensearch/opensearch');
   var client = new OpenSearch(config);

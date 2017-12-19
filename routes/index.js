@@ -7,6 +7,12 @@ var config = require('./../config.json');
 var debug = require('debug')('upper:index');
 var url = require('url');
 
+/**
+ * Render status section for FBS CMS API end point.
+ *
+ * @param res
+ * @return {*}
+ */
 function renderFBSStatus(res) {
   var status = new Status();
 
@@ -54,6 +60,12 @@ function renderFBSStatus(res) {
   });
 }
 
+/**
+ * Render status for FBS sip2 end point.
+ *
+ * @param res
+ * @return {*}
+ */
 function renderSIP2Status(res) {
   var status = new Status();
 
@@ -94,6 +106,12 @@ function renderSIP2Status(res) {
   });
 }
 
+/**
+ * Render status for OpenSearch.
+ *
+ * @param res
+ * @return {*}
+ */
 function renderOpenSearchStatus(res) {
   var status = new Status();
 
@@ -134,7 +152,9 @@ function renderOpenSearchStatus(res) {
   });
 }
 
-
+/**
+ * Return the route content.
+ */
 router.get('/', function(req, res, next) {
   var renders = [
     renderFBSStatus(res),
