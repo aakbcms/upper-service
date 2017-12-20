@@ -3,9 +3,7 @@ var router = express.Router();
 
 var Status = require('./../status');
 var config = require('./../config.json');
-
 var debug = require('debug')('upper:index');
-var url = require('url');
 
 /**
  * Render status section for FBS CMS API end point.
@@ -19,7 +17,6 @@ function renderFBSStatus(res) {
   return new Promise(function(resolve, reject) {
     status.testConnections(config.API.url).then(function (connection) {
       return status.testFBS(config.API.config, 'login').then(function (login) {
-        // result1 is available here
         return status.testFBS(config.API.config, 'authenticate').then(function (authenticate) {
           var total = parseInt(connection.time + login.time + authenticate.time);
           var data = {
