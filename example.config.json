@@ -1,0 +1,56 @@
+{
+  "notification": {
+    "interval": "*/1 * * * *",
+    "webhook": "",
+    "channel": "#aakb-status"
+  },
+  "API": {
+    "name": "FBS api",
+    "limit": 1500,
+    "url": "https://cicero-fbs.com/rest/",
+    "config": {
+      "endpoint": "https://cicero-fbs.com/rest/",
+      "login": {
+        "uri": "external/v1/DK-775100/authentication/login",
+        "password": "",
+        "username": ""
+      },
+      "authenticate": {
+        "uri": "external/v1/DK-775100/patrons/authenticate",
+        "pincode": "",
+        "libraryCardNumber": ""
+      }
+    }
+  },
+  "SIP2": {
+    "name": "FBS sip2",
+    "limit": 1000,
+    "url": "https://Cicero-fbs.com/rest/sip2/DK-775100",
+    "config": {
+      "username": "",
+      "password": "",
+      "endpoint": "https://cicero-fbs.com/rest/sip2/DK-775100",
+      "agency": "DK-775100",
+      "location": "hb"
+    }
+  },
+  "OpenSearch": {
+    "name": "OpenSearch",
+    "limit": 1500,
+    "url": "https://opensearch.addi.dk/b3.5_4.5/",
+    "config": {
+      "wsdl": "https://opensearch.addi.dk/b3.5_4.5/?wsdl",
+      "authentication": {
+        "groupIdAut": "",
+        "passwordAut": "",
+        "userIdAut": ""
+      },
+      "profile": "",
+      "agency": "",
+      "query": "krimi and holdingsitem.agencyid=775100",
+      "allObjects": 1,
+      "start": 1,
+      "stepValue": 10
+    }
+  }
+}
