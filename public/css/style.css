@@ -28,3 +28,7 @@ body {
 .container .card {
   margin-top: 15px;
 }
+
+.progress-bar {
+  height: 2px;
+}

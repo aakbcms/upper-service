@@ -13,16 +13,22 @@ slack.setWebhook(config.notification.webhook);
  *
  * @param message
  */
-function postMessage(message) {
+function postMessage(message, type) {
   slack.webhook({
     channel: config.notification.channel,
     username: "friendly-bot",
-    text: message
+    attachments:[
+      {
+        "text": message,
+        "color": type
+      }
+    ]
   }, function(err, response) {
     debug(response);
   });
 }
 
+// Start the scheduler.
 var j = schedule.scheduleJob(config.notification.interval, function(){
   var status = new Status();
 
@@ -32,13 +38,13 @@ var j = schedule.scheduleJob(config.notification.interval, function(){
       return status.testFBS(config.API.config, 'authenticate').then(function (authenticate) {
         var total = parseInt(connection.time + login.time + authenticate.time);
         if (total > config.API.limit) {
-          postMessage('<@gitte.barlach> FBS API is slowing down - ' + total + 'ms');
+          postMessage('<@gitte.barlach> FBS API is slowing down - ' + total + 'ms', 'warning');
         }
       });
     });
   }).catch(function (e) {
     var message = typeof e === 'string' ? e : e.message;
-    postMessage('<@gitte.barlach> Error in connecting with FBS API - ' + message);
+    postMessage('<@gitte.barlach> Error in connecting with FBS API - ' + message, 'danger');
   });
 
   // Check FBS sip2.
@@ -46,12 +52,12 @@ var j = schedule.scheduleJob(config.notification.interval, function(){
     return status.testFBS(config.SIP2.config, 'sip2').then(function(sip2) {
       var total = parseInt(connection.time + sip2.time);
       if (total > config.API.limit) {
-        postMessage('<@gitte.barlach> FBS SIP2 is slowing down - ' + total + 'ms');
+        postMessage('<@gitte.barlach> FBS SIP2 is slowing down - ' + total + 'ms', 'warning');
       }
     })
   }).catch(function (e) {
     var message = typeof e === 'string' ? e : e.message;
-    postMessage('<@gitte.barlach> Error in connecting with FBS SIP2 - ' + message);
+    postMessage('<@gitte.barlach> Error in connecting with FBS SIP2 - ' + message, 'danger');
   });
 
   // Check OpenSearch.
@@ -59,11 +65,11 @@ var j = schedule.scheduleJob(config.notification.interval, function(){
     return status.testOpenSearch(config.OpenSearch.config).then(function (opensearch) {
       var total = parseInt(connection.time + opensearch.time);
       if (total > config.API.limit) {
-        postMessage('<@gitte.barlach> OpenSearch is slowing down - ' + total + 'ms');
+        postMessage('<@gitte.barlach> OpenSearch is slowing down - ' + total + 'ms', 'warning');
       }
     })
   }).catch(function (e) {
     var message = typeof e === 'string' ? e : e.message;
-    postMessage('<@gitte.barlach> Error in connecting with OpenSearch - ' + message);
+    postMessage('<@gitte.barlach> Error in connecting with OpenSearch - ' + message, 'danger');
   });
 });
