@@ -64,7 +64,7 @@ var j = schedule.scheduleJob(config.notification.interval, function(){
   status.testConnections(config.OpenSearch.url).then(function (connection) {
     return status.testOpenSearch(config.OpenSearch.config).then(function (opensearch) {
       var total = parseInt(connection.time + opensearch.time);
-      if (total > config.API.limit) {
+      if (total > config.OpenSearch.limit) {
         postMessage('<@gitte.barlach> OpenSearch is slowing down - ' + total + 'ms', 'warning');
       }
     })
