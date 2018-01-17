@@ -53,7 +53,7 @@ var j = schedule.scheduleJob(config.notification.interval, function() {
   status.testConnections(config.SIP2.url).then(function (connection) {
     return status.testFBS(config.SIP2.config, 'sip2').then(function(sip2) {
       var total = parseInt(connection.time + sip2.time);
-      if (total > config.API.limit) {
+      if (total > config.SIP2.limit) {
         postMessage('<@gitte.barlach> FBS SIP2 is slowing down - ' + total + 'ms', 'warning');
       }
     })
