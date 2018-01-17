@@ -25,6 +25,7 @@
     "express": "^4.16.2",
     "handlebars": "^4.0.11",
     "html-entities": "^1.2.1",
+    "influx": "^5.0.7",
     "node-schedule": "^1.2.5",
     "nodemailer": "^4.4.1",
     "request": "^2.83.0",

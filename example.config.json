@@ -4,6 +4,12 @@
     "webhook": "",
     "channel": "#aakb-status"
   },
+  "logger": {
+    "influx": {
+      "host": "localhost",
+      "database": "ddb_services"
+    }
+  },
   "API": {
     "name": "FBS api",
     "limit": 1500,

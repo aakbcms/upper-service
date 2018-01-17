@@ -1,17 +1,20 @@
 /**
+ * Upper service checks DBC/FBS service for connectivity.
  *
+ *  - Create a status web page.
+ *  - Notification service for slack.
+ *  - Plots response times into influxdb
  */
+
 var debug = require('debug')('upper:express');
 
 var http = require('http');
-
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-
 var app = express();
 
 // view engine setup

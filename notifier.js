@@ -1,4 +1,6 @@
-
+/**
+ * Notifier applicaton the post connectivity issues to slack.
+ */
 var schedule = require('node-schedule');
 var Status = require('./status');
 var config = require('./config.json');
@@ -29,7 +31,7 @@ function postMessage(message, type) {
 }
 
 // Start the scheduler.
-var j = schedule.scheduleJob(config.notification.interval, function(){
+var j = schedule.scheduleJob(config.notification.interval, function() {
   var status = new Status();
 
   // Check FBS API.
