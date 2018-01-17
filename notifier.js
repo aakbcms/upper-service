@@ -1,4 +1,6 @@
-
+/**
+ * Notifier applicaton the post connectivity issues to slack.
+ */
 var schedule = require('node-schedule');
 var Status = require('./status');
 var config = require('./config.json');
@@ -29,7 +31,7 @@ function postMessage(message, type) {
 }
 
 // Start the scheduler.
-var j = schedule.scheduleJob(config.notification.interval, function(){
+var j = schedule.scheduleJob(config.notification.interval, function() {
   var status = new Status();
 
   // Check FBS API.
@@ -51,7 +53,7 @@ var j = schedule.scheduleJob(config.notification.interval, function(){
   status.testConnections(config.SIP2.url).then(function (connection) {
     return status.testFBS(config.SIP2.config, 'sip2').then(function(sip2) {
       var total = parseInt(connection.time + sip2.time);
-      if (total > config.API.limit) {
+      if (total > config.SIP2.limit) {
         postMessage('<@gitte.barlach> FBS SIP2 is slowing down - ' + total + 'ms', 'warning');
       }
     })
@@ -64,7 +66,7 @@ var j = schedule.scheduleJob(config.notification.interval, function(){
   status.testConnections(config.OpenSearch.url).then(function (connection) {
     return status.testOpenSearch(config.OpenSearch.config).then(function (opensearch) {
       var total = parseInt(connection.time + opensearch.time);
-      if (total > config.API.limit) {
+      if (total > config.OpenSearch.limit) {
         postMessage('<@gitte.barlach> OpenSearch is slowing down - ' + total + 'ms', 'warning');
       }
     })
