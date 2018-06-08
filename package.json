@@ -28,16 +28,16 @@
     "influx": "^5.0.7",
     "node-schedule": "^1.2.5",
     "nodemailer": "^4.4.1",
-    "request": "^2.83.0",
-    "request-json": "^0.6.2",
+    "request": "^2.87.0",
+    "request-json": "^0.6.3",
     "serve-favicon": "^2.4.5",
     "slack": "^9.1.1",
     "slack-node": "^0.1.8",
     "slack-notify": "^0.1.6",
-    "soap": "^0.23.0",
+    "soap": "^0.24.0",
     "twig": "^1.10.5"
   },
   "devDependencies": {
-    "nodemon": "^1.13.3"
+    "nodemon": "^1.17.5"
   }
 }
