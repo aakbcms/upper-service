@@ -18,29 +18,37 @@ function renderFBSStatus(res) {
     status.testConnections(config.API.url).then(function (connection) {
       return status.testFBS(config.API.config, 'login').then(function (login) {
         return status.testFBS(config.API.config, 'authenticate').then(function (authenticate) {
-          var total = parseInt(connection.time + login.time + authenticate.time);
-          var data = {
-            title: 'FBS API Connection',
-            total: total,
-            status: total < config.API.limit ? 'success' : 'warning',
-            items: [{
-              'type': 'Socket',
-              'uri': connection.host,
-              'time': connection.time
-            }, {
-              'type': 'Login',
-              'uri': login.uri,
-              'time': login.time
-            }, {
-              'type': 'User authentication',
-              'uri': authenticate.uri,
-              'time': authenticate.time
-            }]
-          };
-          debug(data);
+          return status.testFBS(config.API.config, 'preauthenticate').then(function (preauthenticate) {
+            var total = parseInt(connection.time + login.time + authenticate.time + preauthenticate.time);
+            var data = {
+              title: 'FBS API Connection',
+              total: total,
+              status: total < config.API.limit ? 'success' : 'warning',
+              items: [{
+                'type': 'Socket',
+                'uri': connection.host,
+                'time': connection.time
+              }, {
+                'type': 'Login',
+                'uri': login.uri,
+                'time': login.time
+              }, {
+                'type': 'User authentication',
+                'uri': authenticate.uri,
+                'time': authenticate.time,
+                'error': !authenticate.authenticated
+              }, {
+                'type': 'User pre-authentication',
+                'uri': preauthenticate.uri,
+                'time': preauthenticate.time,
+                'error' : !preauthenticate.authenticated
+              }]
+            };
+            debug(data);
 
-          res.render('status', data, function (err, html) {
-            resolve(html);
+            res.render('status', data, function (err, html) {
+              resolve(html);
+            });
           });
         });
       });

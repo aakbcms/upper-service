@@ -1,26 +1,29 @@
 /**
  * Notifier applicaton the post connectivity issues to slack.
  */
-var schedule = require('node-schedule');
-var Status = require('./status');
+let schedule = require('node-schedule');
+let Status = require('./status');
 
-var config = require('./config.json');
-var debug = require('debug')('upper:logger')
+let config = require('./config.json');
+let debug = require('debug')('upper:logger');
 
-var Influx = require('influx');
+let Influx = require('influx');
 
 /**
  * Post message to slack.
  *
- * @param message
+ * @param db
+ * @param type
+ * @param connection
+ * @param time_used
  */
 function write(db, type, connection, time_used) {
-  dataPoint = [{
+  let dataPoint = [{
     measurement: type,
     fields: { 
       "connection": connection,
       "time_used": time_used
-    },
+    }
   }];
 
   db.writePoints(dataPoint)
@@ -29,7 +32,7 @@ function write(db, type, connection, time_used) {
   });
 }
 
-var db = new Influx.InfluxDB(config.logger.influx);
+let db = new Influx.InfluxDB(config.logger.influx);
 db.getDatabaseNames()
   .then(function (names) {
     if (!names.includes(config.logger.influx.database)) {
@@ -40,15 +43,25 @@ db.getDatabaseNames()
     debug('READY');
 
     // Start the scheduler.
-    var j = schedule.scheduleJob(config.notification.interval, function() {
-      var status = new Status();
+    let j = schedule.scheduleJob(config.notification.interval, function() {
+      let status = new Status();
 
       // Check FBS API.
       status.testConnections(config.API.url).then(function (connection) {
         return status.testFBS(config.API.config, 'login').then(function (login) {
           return status.testFBS(config.API.config, 'authenticate').then(function (authenticate) {
-            var time_used = parseInt(connection.time) + parseInt(login.time) + parseInt(authenticate.time);
-            write(db, 'FBS_API', parseInt(connection.time), time_used);
+            return status.testFBS(config.API.config, 'preauthenticate').then(function (preauthenticate) {
+              let time_used = parseInt(connection.time) + parseInt(login.time) + parseInt(authenticate.time) + parseInt(preauthenticate.time);
+
+              write(db, 'FBS_API', parseInt(connection.time), time_used);
+              write(db, 'FBS_API_LOGIN', parseInt(connection.time), parseInt(login.time));
+              if (authenticate.authenticated) {
+                write(db, 'FBS_API_AUTH', parseInt(connection.time), parseInt(authenticate.time));
+              }
+              if (preauthenticate.authenticated) {
+                write(db, 'FBS_API_PREAUTH', parseInt(connection.time), parseInt(preauthenticate.time));
+              }
+            });
           });
         }); 
       }).catch(function (e) {

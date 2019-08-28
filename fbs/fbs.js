@@ -86,6 +86,42 @@ FBS.prototype.authenticate = function authenticate() {
         resolve({
           'uri': uri,
           'statusCode': res.statusCode,
+          'authenticated': body.hasOwnProperty('authenticated') ? body.authenticated : false,
+          'time': res.elapsedTime
+        });
+      }
+    });
+  });
+};
+
+/**
+ * Pre-authenticate a library with FBS.
+ *
+ * @return {*}
+ *   Promise tha resolved with HTTP statusCode and request time. Rejects with the http error.
+ */
+FBS.prototype.preauthenticate = function preauthenticate() {
+  var self = this;
+  return new Promise(function(resolve, reject) {
+    var uri = self.config.preauthenticate.uri;
+    var data = JSON.parse(JSON.stringify(self.config.preauthenticate));
+
+    self.client.post(uri, data.cprNumber, function(err, res, body) {
+      if (err) {
+        reject(err);
+      }
+      else if (res.statusCode !== 200) {
+        reject({
+          'uri': uri,
+          'statusCode': res.statusCode,
+          'time': res.elapsedTime
+        });
+      }
+      else {
+        resolve({
+          'uri': uri,
+          'statusCode': res.statusCode,
+          'authenticated': body.hasOwnProperty('authenticated') ? body.authenticated : false,
           'time': res.elapsedTime
         });
       }

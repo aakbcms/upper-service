@@ -54,6 +54,12 @@ Status.prototype.testFBS = function testFBS(config, type) {
       }
       return fbsClient.authenticate();
 
+    case "preauthenticate":
+      if (fbsClient === undefined) {
+        fbsClient = new FBS(config);
+      }
+      return fbsClient.preauthenticate();
+
     default:
       console.error('Unknown test found in configuration: ' + type);
       break;

@@ -20,7 +20,7 @@ body {
 /* Custom page CSS */
 .container {
   width: auto;
-  max-width: 680px;
+  max-width: 690px;
   padding: 0 15px;
   margin-top: 15px;
 }
@@ -31,4 +31,8 @@ body {
 
 .progress-bar {
   height: 2px;
+}
+
+p.error {
+  color: darkred;
 }

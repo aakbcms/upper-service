@@ -25,6 +25,10 @@
         "uri": "external/v1/DK-775100/patrons/authenticate",
         "pincode": "",
         "libraryCardNumber": ""
+      },
+      "preauthenticate": {
+        "uri": "external/DK-775100/patrons/preauthenticated/v3",
+        "cprNumber": ""
       }
     }
   },
@@ -43,9 +47,9 @@
   "OpenSearch": {
     "name": "OpenSearch",
     "limit": 1500,
-    "url": "https://opensearch.addi.dk/b3.5_4.5/",
+    "url": "https://opensearch.addi.dk/b3.5_5.0/",
     "config": {
-      "wsdl": "https://opensearch.addi.dk/b3.5_4.5/?wsdl",
+      "wsdl": "https://opensearch.addi.dk/b3.5_5.0/?wsdl",
       "authentication": {
         "groupIdAut": "",
         "passwordAut": "",
