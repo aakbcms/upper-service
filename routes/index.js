@@ -35,11 +35,13 @@ function renderFBSStatus(res) {
               }, {
                 'type': 'User authentication',
                 'uri': authenticate.uri,
-                'time': authenticate.time
+                'time': authenticate.time,
+                'error': !authenticate.authenticated
               }, {
                 'type': 'User pre-authentication',
                 'uri': preauthenticate.uri,
-                'time': preauthenticate.time
+                'time': preauthenticate.time,
+                'error' : !preauthenticate.authenticated
               }]
             };
             debug(data);

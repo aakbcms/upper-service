@@ -3,7 +3,9 @@
   <div class="card-body alert-{{ status }}">
       {% if items is defined %}
           {% for item in items %}
-            <p>{{ item.type }} - {{ item.uri }} - {{ item.time }} ms</p>
+            <p class="{{ item.error ? 'error' : 'no-error' }}">
+                {{ item.type }} - {{ item.uri }} - {{ item.time }} ms
+            </p>
           {% endfor %}
       {% endif %}
 

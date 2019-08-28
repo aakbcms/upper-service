@@ -86,6 +86,7 @@ FBS.prototype.authenticate = function authenticate() {
         resolve({
           'uri': uri,
           'statusCode': res.statusCode,
+          'authenticated': body.hasOwnProperty('authenticated') ? body.authenticated : false,
           'time': res.elapsedTime
         });
       }
@@ -104,8 +105,8 @@ FBS.prototype.preauthenticate = function preauthenticate() {
   return new Promise(function(resolve, reject) {
     var uri = self.config.preauthenticate.uri;
     var data = JSON.parse(JSON.stringify(self.config.preauthenticate));
-    delete data.uri;
-    self.client.post(uri, data, function(err, res, body) {
+
+    self.client.post(uri, data.cprNumber, function(err, res, body) {
       if (err) {
         reject(err);
       }
@@ -120,6 +121,7 @@ FBS.prototype.preauthenticate = function preauthenticate() {
         resolve({
           'uri': uri,
           'statusCode': res.statusCode,
+          'authenticated': body.hasOwnProperty('authenticated') ? body.authenticated : false,
           'time': res.elapsedTime
         });
       }

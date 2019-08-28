@@ -27,7 +27,7 @@
         "libraryCardNumber": ""
       },
       "preauthenticate": {
-        "uri": "external/v1/DK-775100/patrons/preauthenticated",
+        "uri": "external/DK-775100/patrons/preauthenticated/v3",
         "cprNumber": ""
       }
     }
