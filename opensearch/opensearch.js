@@ -43,10 +43,12 @@ OpenSearch.prototype.search = function search() {
             });
           }
           else {
+            console.log(result);
             resolve({
               'uri': self.config.wsdl,
               'time': time,
-              'timeOpenSearch': result.result.statInfo.time
+              'timeOpenSearch': result.hasOwnProperty('statInfo') ? result.result.statInfo.time : 0,
+              'error': result.hasOwnProperty('error')
             });
           }
         });
