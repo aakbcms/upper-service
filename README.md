@@ -15,3 +15,13 @@ All end-points are check by using a socket connection to verify that the end-poi
 ## Run
 
 * npm run start
+
+## Docker
+
+```
+docker-compose up -d
+```
+
+```
+docker-compose exec node-app npm install"
+```

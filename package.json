@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
     "debug": "DEBUG=upper:* node app.js",
-    "dev": "DEBUG=upper:* nodemon node app.js"
+    "dev": "DEBUG=upper:* nodemon node app.js",
+    "start-logger": "node logger.js",
+    "dev-logger": "DEBUG=upper:* nodemon node logger.js"
   },
   "repository": {
     "type": "git",
@@ -23,7 +25,7 @@
     "body-parser": "^1.18.2",
     "debug": "^3.1.0",
     "express": "^4.16.2",
-    "handlebars": "^4.0.11",
+    "handlebars": "^4.1.2",
     "html-entities": "^1.2.1",
     "influx": "^5.0.7",
     "node-schedule": "^1.2.5",
@@ -33,7 +35,7 @@
     "serve-favicon": "^2.4.5",
     "slack": "^9.1.1",
     "slack-node": "^0.1.8",
-    "slack-notify": "^0.1.6",
+    "slack-notify": "^0.1.7",
     "soap": "^0.24.0",
     "twig": "^1.10.5"
   },

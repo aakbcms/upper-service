@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  node-app:
+    image: node:10
+    command: npm run dev
+    ports:
+      - '3000'
+    volumes:
+      - .:/app:delegated
+    working_dir: /app
+
+  node-logger:
+    image: node:10
+    command: npm run dev-logger
+    volumes:
+      - .:/app:delegated
+    working_dir: /app
+
+  influxdb:
+    image: influxdb
+    ports:
+      - '8086'
+      - '8083'
+    environment:
+      INFLUXDB_ADMIN_ENABLED: 'true'
+
+  chronograf:
+    image: chronograf:alpine
+    ports:
+      - '8888'

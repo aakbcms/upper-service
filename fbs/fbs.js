@@ -93,4 +93,38 @@ FBS.prototype.authenticate = function authenticate() {
   });
 };
 
+/**
+ * Pre-authenticate a library with FBS.
+ *
+ * @return {*}
+ *   Promise tha resolved with HTTP statusCode and request time. Rejects with the http error.
+ */
+FBS.prototype.preauthenticate = function preauthenticate() {
+  var self = this;
+  return new Promise(function(resolve, reject) {
+    var uri = self.config.preauthenticate.uri;
+    var data = JSON.parse(JSON.stringify(self.config.preauthenticate));
+    delete data.uri;
+    self.client.post(uri, data, function(err, res, body) {
+      if (err) {
+        reject(err);
+      }
+      else if (res.statusCode !== 200) {
+        reject({
+          'uri': uri,
+          'statusCode': res.statusCode,
+          'time': res.elapsedTime
+        });
+      }
+      else {
+        resolve({
+          'uri': uri,
+          'statusCode': res.statusCode,
+          'time': res.elapsedTime
+        });
+      }
+    });
+  });
+};
+
 module.exports = FBS;

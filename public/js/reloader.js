@@ -15,8 +15,8 @@ document.addEventListener('DOMContentLoaded', function(){
       setTimeout(animator, msecsPerUpdate);
     }
     else {
-      location.reload();
       progress.style.width = '100%';
+      location.reload();
     }
   };
 
