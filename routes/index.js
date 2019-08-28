@@ -135,7 +135,8 @@ function renderOpenSearchStatus(res) {
           }, {
             'type': 'OpenSearch',
             'uri': opensearch.uri,
-            'time': '(' + opensearch.timeOpenSearch + 's) ' + opensearch.time
+            'time': '(' + opensearch.timeOpenSearch + 's) ' + opensearch.time,
+            'error': opensearch.error
           }]
         };
         debug(data);
