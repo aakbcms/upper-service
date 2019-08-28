@@ -43,7 +43,6 @@ OpenSearch.prototype.search = function search() {
             });
           }
           else {
-            console.log(result);
             resolve({
               'uri': self.config.wsdl,
               'time': time,
