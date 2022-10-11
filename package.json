@@ -36,7 +36,7 @@
     "slack": "^9.1.1",
     "slack-node": "^0.1.8",
     "slack-notify": "^0.1.7",
-    "soap": "^0.24.0",
+    "soap": "^0.45.0",
     "twig": "^1.10.5"
   },
   "devDependencies": {
